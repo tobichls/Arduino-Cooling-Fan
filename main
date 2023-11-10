@@ -1,0 +1,62 @@
+// constants won't change. They're used here to set pin numbers:
+const int buttonPin = 2;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+const int motorPin = 9;
+// variables will change:
+int buttonState = 0;         // variable for reading the pushbutton status
+void setup() {
+  // initialise the LED pin as an output:
+
+  pinMode(ledPin, OUTPUT);
+  // initialise the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
+  //initialise the motor pin as an output:
+  pinMode(motorPin, OUTPUT); 
+}
+void loop() {                              
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
+  
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == LOW) {
+    // turn LED on:
+    digitalWrite(ledPin, HIGH);
+    analogWrite(motorPin, 200);
+  } else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW);
+    analogWrite(motorPin, 0);
+  }
+}
+void motorOnThenOffWithSpeed(){
+  
+  int onSpeed = 200;  // a number between 0 (stopped) and 255 (full speed) 
+  int onTime = 2500;  //the number of milliseconds for the motor to turn on for
+  
+  int offSpeed = 50;  // a number between 0 (stopped) and 255 (full speed) 
+  int offTime = 1000; //the number of milliseconds for the motor to turn off for
+  
+  analogWrite(motorPin, onSpeed);   // turns the motor On
+  delay(onTime);                    // waits for onTime milliseconds
+  analogWrite(motorPin, offSpeed);  // turns the motor Off
+  delay(offTime);                   // waits for offTime milliseconds
+}
+/*
+ * motorAcceleration() - accelerates the motor to full speed then
+ * back down to zero
+*/
+void motorAcceleration(){
+  int delayTime = 50; //milliseconds between each speed step
+  
+  //Accelerates the motor
+  for(int i = 0; i &lt; 256; i++){ //goes through each speed from 0 to 255
+    analogWrite(motorPin, i);   //sets the new speed
+    delay(delayTime);           // waits for delayTime milliseconds
+  }
+  
+  //Decelerates the motor
+  for(int i = 255; i &gt;= 0; i--){ //goes through each speed from 255 to 0
+    analogWrite(motorPin, i);   //sets the new speed
+    delay(delayTime);           // waits for delayTime milliseconds
+  }
+}
